@@ -4,10 +4,10 @@
 
 ## Search for "some bullshit" to fix up hacky shit later on
 
-## A template shiny app as part of a Clinical Brain Network teaching session
+## A "template" shiny app as part of a teaching session - template is being used VERY loosely here. 
 ## Created by Amy Stringer
 #
-# The goal of the template is to provide code demonstrating all possible input/
+# The goal of the template is to provide code demonstrating some of the possible input/
 # output options within R shiny, as well as the basic layout options.
 #
 # For a copy of the code used in the face to face teaching session (complete with
@@ -35,8 +35,7 @@ diaSub <- diamonds %>%
   slice(1:60) %>%
   ungroup
 
-## thoughts. I want to redo the outputs to include the mtcars dataset instead, and show the datatable to plot filter like shown in here
-## https://rstudio.github.io/DT/shiny.html
+# fixed up one of the built in dataset to use as demonstration for outputs 
 mtcarsNew <- tibble(mtcars) %>%
   mutate(
     type = rownames(mtcars),
@@ -53,33 +52,67 @@ mtcarsNew <- tibble(mtcars) %>%
     "Weight" = "wt",
     "Transmission" = "am",
     "Engine" = "vs"
-  )
+  ) %>% 
+  relocate(type)
 
 
 # Define UI for application
-ui <- navbarPage(
-  title = "A Template (using a nav bar page)",
+ui <- shinyUI(
+  
+  # this is exactly as it sounds, a page that is fluid - you can put whatever you want in there 
+  fluidPage(
+    list(
+      # to start with a want to add a page header with a logo and title 
+    div(style="padding: 1px 0px; width: '100%'",
+        # you can do this with a title panel 
+        titlePanel(windowTitle = "It's a Teaching Session!",
+                   title =
+                     # i want to divide the header into text and image
+                     div(
+                       # image first 
+                       img(
+                         src = "logo.png",
+                         height = 100,
+                         width = 100,
+                         style = "margin:10px 10px"
+                       ),
+                       # then text 
+                       "It's a Teaching Session!"
+                     )
+        )
+    )),
+  # navbarPage is a tabbed layout that give page tabs across the top - slightly different to tab set which you can also see throughout this app
+  navbarPage(
+    # every navbarPage needs a title 
+  title = "A Demo Shiny App",
+  
   # a particular theme can be added by uncommenting the below line
   # and changing "yourtheme" to you preferred theme name
   # theme = shinythemes::shinytheme("flatly"),
   
   # navbarPage is a tabbed UI, add as many tabs as you like...
-  tabPanel(title = "A day in the life",
+  tabPanel(title = "Agenda",
            
            # tab contents go in here
            # adding text and images
            h1("Amy, what are we doing here? "),
            h5("You\'re probably wondering,",
+              # tags$b give bold text. This is also a HTML wrapper 
               tags$b('"What are we doing here? What is this nonsense? Why is Amy forcing R on us?"')
            ),
-           h5("I don't have a good answer for that other than I was invited because I have a fair bit of expertise on the topic. It'll be fun I promise."),
+           h5("I don't have a good answer for that other than I was invited because I'm great. It'll be fun I promise."),
            h5("So far, there's 2 sessions booked so sit tight. Maybe you'll even learn something!"),
            
+           # page breaks. Another HTML wrapper 
            tags$br(),
            
+           # fluidRow is like fluidPage but for rows within a page 
            fluidRow(
-             column(style = 'border-right: 1px solid gray',
+             # we can break rows up into columns
+             # just make sure the sum of column widths does not exceed 12 (a full row width)
+             column(style = 'border-right: 1px solid gray',                    # there are many style tags, this one adds a border to the column. Fairly sure this is CSS styling
                     width = 6,
+                    # text is added using these HTML wrappers 
                     h2("Session 1 From R to the UN: A shiny user interface"),
                     h4("Session one will hopefully provide a gentle introduction has two main parts:"),
                     # we can created an ordered list
@@ -111,6 +144,7 @@ ui <- navbarPage(
            fluidRow(
              column(width = 3,
                     # i just want to centre my text - this is empty fluff 
+                    # I'm sure there is a better way, but this works just fine 
              ),
              column(width = 6,
                     h2("These sessions will NOT cover: "),
@@ -128,6 +162,8 @@ ui <- navbarPage(
                     # i just want to centre my text - this is empty fluff 
              )
            ),
+           # this rules a horizontal line under the last element
+           # it's another HTML wrapper. tags$hr() would do the same thing 
            hr(),
            fluidRow(
              column(width = 2,
@@ -136,17 +172,14 @@ ui <- navbarPage(
                     
              ),
              column(width = 8,
+                    # divide the space into three images 
                     div(style = "display: inline-block;", 
                         img(src = "app.png",
                             height = 400,
-                            width = 300)
-                    ),
-                    div(style = "display: inline-block;", 
-                         img(src = "tasks.png",
-                             height = 400,
-                             width = 300)
-                    ),
-                    div(style = "display: inline-block;", 
+                            width = 300), 
+                        img(src = "tasks.png",
+                            height = 400,
+                            width = 300), 
                         img(src = "goodcode.png",
                             height = 400, 
                             width = 300)
@@ -159,13 +192,15 @@ ui <- navbarPage(
              )
            )
   ),
-  tabPanel(
-    
-    title = "What's a shiny?",
+  # next panel in the navbar page 
+  tabPanel(title = "What's a shiny?",
+    # the above title will be visible inside the tab selector 
+    # but maybe we also want a little inside the tab 
     h1("R to the UN? huh?"),
     h4("The easiest way to tell you wat a shiny app is, is to show you (but really it's just a web application that you can use RStudio to make)."),
     
     fluidRow(
+      # I only have a little bit of text here, so I want it to start closer to the centre of the row 
       column(width = 3, 
              
              # this is just empty fluff to create some space 
@@ -173,7 +208,7 @@ ui <- navbarPage(
       ),
       column(width = 9,
              h5("Here's a list of some of the apps I've made that are actually deployed... "),
-             h5("Most of them have been targetting to schools across Queensland"),
+             h5("Most of them were made for use in schools across Queensland"),
              tags$ul(
                tags$li(
                  tags$a(href = "https://virtualreef.shinyapps.io/vrdpractical/", "An app for when COVID-19 took away school excursions.")
@@ -185,21 +220,26 @@ ui <- navbarPage(
                  tags$a(href = "https://qutschoolofmaths.shinyapps.io/specialistmaths/", 'An app for when "Maths C" did the same!')
                )
              ),
-             h5("Others still have me pinching myself"),
+             h5("I made one that was a bit mroe spicy"),
              tags$ul(
                tags$li(
                  tags$a(href = "https://qutschoolofmaths.shinyapps.io/uncoursetoolapp/", "An top secret prototype app for REDACTED to teach the REDACTED how to use REDATED for REDACTED. ")
                ), 
              ),
              h5("If you hold off on the pitchforks for near the full hour, I'll even show you how the prototype turned out in the final deployment stage."),
-             actionButton("startLesson", "On with the lesson!")
+             ### oooh what's this? A button???? (this links to an output item in the server section of the script
+             actionButton(inputId = "startLesson", label = "On with the lesson!)")
       ),
-      uiOutput("OnWithTheLesson")
+      # UI output allows you to add dynamic user interface elements. This is going to be linked with the above action button. 
+      # read on in the server code to see how 
+      uiOutput(outputId = "OnWithTheLesson")
     )
   ),
+  # A new tab for the navbar 
   tabPanel(title = "Inputs!",
+           # this tab is all about the different kinds of inputs you can have 
            
-           # row 1 - info on using inputs in R
+           # row 1 - some text 
            fluidRow(
              h1("Shiny Inputs!"),
              h4("Below are a few examples of different kinds of inputs that can be used in a R shiny web application."),
@@ -208,29 +248,35 @@ ui <- navbarPage(
            # rule some horizontal lines, because why not? They look nice.
            tags$hr(),
            h4("Different kinds of select inputs"),
-           h5("Some of these have additional inputs that allow a user to select multiple items, or to force a default selection."),
+           h5("Some of these have additional options that allow a user to select multiple items, or to force a default selection."),
            
-           ### input options
-           ## row 2
+           # row 2 - the first set of input options 
            fluidRow(
+             # row 2 col 1
              # radio buttons
              column(width = 4,
                     radioButtons(
+                      # inputId is what is used to reference the input within the source code 
                       inputId = "radButton",
+                      # but the label is what the user sees
                       label = "Select an x axis variable",
+                      # the choices here are the numerical cols for the dataframe i created before the UI code 
                       choices = names(mtcarsNew %>% select(where(is.numeric)))
                     )
              ),
+             # row 2 col 2
              # select input
              column(width = 4,
                     selectInput(
                       inputId = "selectIn",
                       label = "Select a y axis variable",
+                      # the choices here are the numerical cols for the dataframe i created before the UI code 
                       choices = names(mtcarsNew %>% select(where(is.numeric))),
                       multiple = FALSE
                     )
              ),
-             # checkbox input
+             # row 2 col 3
+             # checkbox input 
              column(width = 4,
                     checkboxGroupInput(
                       inputId = "checkboxIn",
@@ -240,14 +286,17 @@ ui <- navbarPage(
              )
            ),
            
+           # add some space an rule a line 
            tags$br(),
            tags$hr(),
            
+           # some more text before the next row 
            h4("Inputs for dates, files or (the dreaded) text"),
            h5("Here we can select a date range, though there is an input that allows for a single date selection also. A file input can be configured to allow multiple file uploads at once, and the text input is (predictably) unconstrained."),
            
-           ## row 3
+           ## row 3 - the second row of input options 
            fluidRow(
+             # row 3 col 1
              # date range input
              column(width = 4,
                     dateRangeInput(
@@ -257,6 +306,7 @@ ui <- navbarPage(
                        end = max(economics$date)
                      )
              ),
+             # row 3 col 2
              # file input
              column(width = 4,
                     fileInput(
@@ -265,6 +315,7 @@ ui <- navbarPage(
                       multiple = FALSE
                     )
              ),
+             # row 3 col 3
              # text input
              column(width = 4,
                     textInput(inputId = "textIn",
@@ -272,6 +323,7 @@ ui <- navbarPage(
              )
            ),
            
+           # add some space and rule a line 
            tags$br(),
            tags$hr(),
            
@@ -280,13 +332,15 @@ ui <- navbarPage(
            h5("Numbers! When are these not useful?!"),
            h5("Shiny auto produces input reliant outputs IMMEDIATELY as they change. This is super annoying most of the time, and for those times, there are action buttons!"),
            
-           ## row 4
+           ## row 4 - the final row of possible inputs 
            fluidRow(
+             # rows 4 col 1 
              # password input
              column(width = 4,
                     passwordInput(inputId = "passIn",
                                   label = "Super secret password input")
              ),
+             # row 4 col 2
              # numeric input
              column(width = 4,
                     numericInput(
@@ -297,6 +351,7 @@ ui <- navbarPage(
                       value = 0
                     )
              ),
+             # row 4 col 3
              # action button
              column(width = 4,
                     h5("Want to trigger an action? Use an action button..."),
@@ -306,6 +361,7 @@ ui <- navbarPage(
              tags$hr()
            )
   ),
+  # another tab in the navbarpage 
   tabPanel(title = "Outputs!",
            
            # possible outputs - maybe multiple tabs with different iterations
@@ -313,17 +369,25 @@ ui <- navbarPage(
            
            h1("Some example outputs"),
            h3("There are many possible outputs, here I focus one just two and the different ways to make them interactive. "),
+           # tabsetPanel creates a new set up tabs inside the navbarpage tab 
            tabsetPanel(
+             # and just to make things super readable, those tabs are also created with tabPanel 
+             # outputs tab 1
              tabPanel("Table Outputs - Basic",
-                      
+                      # this tab ehas just one row, but I want to add columns 
+                      # and columns can only be added within a fluidRow 
                       fluidRow(
+                        # output tab 1 column 1 
                         column(width = 6,
                                h2("Table 1 - A Basic Table"),
-                               tableOutput(outputId = "simpleTable")
+                               tableOutput(
+                                 # the output ID is effectively the variable name for the output object. 
+                                 # this is how we link items between the user interface and the backend 
+                                 outputId = "simpleTable")
                         ),
                         
                         tags$br(),
-                        
+                        # output tab 1 column 2 
                         column(width = 5,
                                h2("Cons"),
                                tags$ul(
@@ -335,49 +399,67 @@ ui <- navbarPage(
                                ),
                                h2("Pros"),
                                tags$ul(
-                                 tags$li("It presents data in a readable table format")
+                                 tags$li("It presents data in a readable table format (but why use an app for that?)") 
                                )
                         )
                       )
              ),
+             # outputs tab 2
              tabPanel("Table Outputs - Fancy",
+                      # as above - one row but i want two columns! 
                       fluidRow(
                         column(width = 6,       
                                h2('Table 2 - A "Shiny" table'),
+                               # DTOutput is from the DT package for interactive data tables 
                                DT::DTOutput(outputId = "fancyDataTable")
                         ),
                         column(width = 6,
                                h2("Table 2.1 - Selected rows only"),
+                               # a new output, with a new output ID 
                                DT::DTOutput(outputId = "filteredDTOutput")
                         )
                       )
              ),
+             # outputs tab 3
              tabPanel("Plot/Table Linked Outputs",
-                      
+                      # this tab will contains two outputs that appear to talk to each other within the app 
+                      # updating in real time 
                       h2("Interactive and Linked Outputs"),
+                      # one row with two columns 
                       fluidRow(
                         column(width = 6,
-                                      DTOutput(outputId = "mtcarstable")
+                               DTOutput(outputId = "mtcarstable")
                         ),
                         column(width = 6,
+                               # plotlyOutput is from the plotly package 
+                               # it make interactive plots from ggplot2 objects 
+                               # I'm fairly sure there is a plotly python package also 
                                plotlyOutput(outputId = "plotSheFancy")
                         )
                       )
              )
            )
   ),
+  # a new tabe for the navbar page 
   tabPanel(title = "Layouts!",
+           # this tab is going to look gross 
+           # because there is a lot of nested layouts 
+    
+    # while we are on layouts, maybe we also want to think of ways to make an app prettier       
     # add a theme browser to the UI to test available themes
     shinythemes::themeSelector(),
     
-    # a tabbed layout, containing examples of other layouts
+    # a tabbed layout (inside the nave bar page tab), containing examples of other layouts
+    # call this tabsetpanel1
     tabsetPanel(
       tabPanel("Tab Layouts!",
+          # tabsetpanel2: a tabset panel inside tabsetpanel1
           tabsetPanel(
               tabPanel("Tab 1",
                        # you could put stuff in here          
               ),
-              tabPanel("Tab 2",            
+              tabPanel("Tab 2",  
+                  # tabsetpanel3: a tabsetpanel inside tabsetpanel2 inside tabsetpanel1     
                   tabsetPanel(
                       tabPanel("Tab 1",             
                                # you could put stuff in here too 
@@ -386,6 +468,7 @@ ui <- navbarPage(
                                # you could put stuff in here too 
                       ),
                       tabPanel("Tab 3",
+                          # tabsetpanel4: a tabsetpanel inside tabsetpanel3 inside tabsetpanel2 inside tabsetpanel1
                           tabsetPanel(
                               tabPanel("Tab 1", 
                                        # you could put stuff in here          
@@ -420,14 +503,21 @@ ui <- navbarPage(
                   )
               )
           )
-      ),
+      ), # make sure all the brackets are closed!!!! 
+      # this is tab 2 of tabsetpanel 1 - containing sidebar layouts!! 
       tabPanel("Sidebar Layouts!",
+               # sidebar layouts have two parts:
+                # a sidebarPanel() and 
+                # a mainPanel()
+               # call this sidebarLayout1 
                sidebarLayout(
                  sidebarPanel(
+                   # some text 
                    h2("Sidebar panel 1"),
                    h5("Typically side bar panels will contain various inputs"),
                    h5("That relate to the outputs displayed in the main panel"),
                    h5("For Example:"),
+                   # and an input 
                    sliderInput(
                      inputId = "slider",
                      label = "A slider input",
@@ -437,11 +527,14 @@ ui <- navbarPage(
                    )
                  ),
                  mainPanel(
+                   # lets add some outputs to the main panel 
                    h2("Main panel 1"),
                    DT::DTOutput(outputId = "recursiveTab"),
-                   
+                   # and another side bar layout! 
+                   # sidebarlayout 2 
                    sidebarLayout(
                      sidebarPanel(
+                       # another input? 
                        h3("Sidebar panel 2"),
                        sliderInput(
                          inputId = "slider2",
@@ -452,9 +545,10 @@ ui <- navbarPage(
                        )
                      ),
                      mainPanel(
+                       # another output? 
                        h3("Main panel 2"),
                        DT::DTOutput(outputId = "recursiveTab2"),
-                       
+                       # oh no, not another sidebar layout !! 
                        sidebarLayout(
                          sidebarPanel(
                            h4("Sidebar panel 3"),
@@ -766,11 +860,29 @@ ui <- navbarPage(
   tabPanel("Back to the UN", 
   
            h1("The Final REDACTED"), 
-           tags$a(href = "https://unstats.un.org/bigdata/task-teams/training/catalog/"), "The final training catalouge"
+           tags$a(href = "https://unstats.un.org/bigdata/task-teams/training/catalog/", "The final training catalouge"), 
+           fluidRow(
+             column(width = 2, 
+                    # empty fluff
+             ), 
+             column(width = 8,
+             div(
+               style = "display: inline-block;", 
+               img(src = "bigboy.png",
+                   height = 800,
+                   width = 1150
+               )
+             )
+             ), 
+             column(width = 2, 
+                    # more empty fluff         
+             )
+           )
                     
   )
 )
-
+)
+)
 
 
 # Define server logic required to draw a histogram
@@ -897,6 +1009,30 @@ server <- function(input, output) {
     
   })
   
+  #### Outputs for the sidebar layout tab 
+  
+  output$recursiveTab <- renderDT({
+    
+    numRows <- input$slider 
+    datatable(mtcarsNew[1:numRows, c("type", "Weight", "mpg", "Cylinders")])
+    
+  })
+  
+  output$recursiveTab2 <- renderDT({
+    numRows <- input$slider2
+    datatable(mtcarsNew[1:numRows, c("type", "Weight", "mpg", "Cylinders")])
+  })
+  
+  output$recursiveTab3 <- renderDT({
+    numRows <- input$slider3
+    datatable(mtcarsNew[1:numRows, c("type", "Weight", "mpg", "Cylinders")])    
+  })
+
+  output$recursiveTab4 <- renderDT({
+    numRows <- input$slider4
+    datatable(mtcarsNew[1:numRows, c("type", "Weight", "mpg", "Cylinders")])    
+  })
+    
 }
 
 # Run the application
