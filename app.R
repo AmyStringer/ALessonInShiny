@@ -175,14 +175,14 @@ ui <- shinyUI(
                     # divide the space into three images 
                     div(style = "display: inline-block;", 
                         img(src = "app.png",
-                            height = 400,
-                            width = 300), 
+                            height = 300,
+                            width = 200), 
                         img(src = "tasks.png",
-                            height = 400,
-                            width = 300), 
+                            height = 300,
+                            width = 200), 
                         img(src = "goodcode.png",
-                            height = 400, 
-                            width = 300)
+                            height = 300, 
+                            width = 200)
                     )
              ),
              column(width = 2,
